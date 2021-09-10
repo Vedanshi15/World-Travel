@@ -1,0 +1,63 @@
+.contact-and-map .section-title{
+	font-weight: 400;
+	text-align: left;
+	margin-bottom: 40px;
+}
+.merbtm {
+	margin-bottom: 40px;
+}
+.lb {
+	color: #2e6da4;
+	text-transform: uppercase;
+	padding-right: 10px;
+}
+.flag {
+	width: 15%;
+	height: 10%;
+}
+#googleMap{
+	width: 100%;
+	height: 414px;
+}
+.message{
+	height: 200px;
+}
+.form .input-group{
+	margin-bottom: 15px;
+}
+input[type="submit"]{
+	background: none;
+	color: #2e6da4;
+	border: none;
+	padding: 0;
+
+}
+.contacts{
+	background: #f9f9f9;
+	text-align: center;
+}
+.contact{
+	padding: 20px 20px;
+	background: #fff;
+	transition: all .4s ease-in-out;
+}
+.contact:hover{
+	background: #60C9EB;
+}
+.contact:hover .contact-icon, .contact:hover .contact-name, .contact:hover .contact-detail{
+	color: #fff;
+}
+.contact-icon{
+	color: #60C9EB;
+	font-size: 40px;
+}
+.contact-name{
+	color: #313131;
+	font-size: 15px;
+	margin: 40px auto;
+}
+.contact-detail{
+	color: #969595;
+	line-height: 180%;
+	font-size: 13px;
+}
