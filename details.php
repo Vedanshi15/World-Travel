@@ -13,8 +13,8 @@ define('API_URL', 'https://test.api.amadeus.com');
 $total = "";
 $result = "";
 $data = array(
-	'client_id' => 'zHXrgYcLr9tZRkL0EFahcjkIBE7aPr8y',
-	'client_secret' => 'fow18UqzJAA2IPBI'
+	'client_id' => 'QyMyr0XrwJKaRWlbGUwKE6rrB6NAAKFM',
+	'client_secret' => 'ndLjL8GEKeJFpP3u'
 );
 get_token($data);
 get_countries($ln, $lt, $city);
@@ -41,12 +41,13 @@ function get_token($config)
 	//var_dump($_SESSION['API']['token']);
 	curl_close($c);
 }
+
 function get_countries($ln, $lt, $city)
 {
-  $url = API_URL .  "/v1/shopping/activities?longitude=" . $ln . "&latitude=" . $lt . "&radius=20";
-  $headers = array(
-	  "Content-Type: application/json",
-	  "Authorization: Bearer " . $_SESSION['API']['token']
+$url = API_URL . "/v1/shopping/activities?longitude=" . $ln . "&latitude=" . $lt . "&radius=20";
+$headers = array(
+	"Content-Type: application/json",
+	"Authorization: Bearer " . $_SESSION['API']['token']
 );
 $opts = array(
 	CURLOPT_HTTPHEADER => $headers,
@@ -160,7 +161,7 @@ $total = count((array)$result->data);
               <p><?php echo $result->data[$i]->shortDescription ?></p>
             </ul>
             <p class="features-details">
-				      <?php echo $result->data[$i]->price->currencyCode . ' ' . $result->data[$i]->price->amount; ?>
+				<?php echo $result->data[$i]->price->currencyCode . ' ' . $result->data[$i]->price->amount; ?>
             </p>
             <a href="<?php echo $result->data[$i]->bookingLink ?></p>"
                class="btn btn-default custom-button border-radius">
@@ -168,21 +169,15 @@ $total = count((array)$result->data);
             </a>
           </div>
           <div class="grid-50 table-cell">
-            <div class="flexslider">
-              <ul class="slides">
-				      <?php for ($j = 0; $j < sizeof($result->data[$i]->pictures); $j++) {?>
-                <li class="slider-item" style="background-image: url('<?php echo $result->data[$i]->pictures[$j]; ?>')">
-                  <div class="intro container">
-                  </div>
-                </li> <!-- /.slider-item -->
-				      <?php } ?>
-              </ul> <!-- /.slides -->
-            </div>
+			  <?php for ($j = 0; $j < sizeof($result->data[$i]->pictures); $j++) { ?>
+                <img src="<?php echo $result->data[$i]->pictures[$j]; ?>" alt=""
+                     class="features-img img-responsive _pos-abs">
+			  <?php } ?>
           </div>
         </div> <!-- /.row -->
-        <?php }
-        curl_close($c);
-        } ?>
+	  <?php }
+	  curl_close($c);
+	  } ?>
   </div> <!-- /.container -->
 </section> <!-- /.features -->
 <div class="subscribe section-wrapper">

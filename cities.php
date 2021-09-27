@@ -1,35 +1,38 @@
 <?php
-$lat = $lng = $response = $countryName = $country = $count = $img ="";
-function getCities(){
-  $curl = curl_init();
-  curl_setopt_array($curl, [
-    CURLOPT_URL => "https://spott.p.rapidapi.com/places?limit=100&country=" . $GLOBALS["country"] . "&skip=0&type=CITY",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_SSL_VERIFYPEER => false,
-    CURLOPT_SSL_VERIFYHOST => false,
-    CURLOPT_ENCODING => "",
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 30,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => "GET",
-    CURLOPT_HTTPHEADER => [
-      "x-rapidapi-host: spott.p.rapidapi.com",
-      "x-rapidapi-key: 8bdacfc3eamsh5efe1bb230baba4p1f7eccjsn020c20bb1c6a"
-    ],
-  ]);
-  $GLOBALS["response"] = json_decode(curl_exec($curl));
-  $err = curl_error($curl);
-  curl_close($curl);
-  if ($err) {
-    echo "cURL Error #:" . $err;
-  } else {
-    $GLOBALS["count"] = count($GLOBALS["response"]);
-  }
+$lat = $lng = $response = $countryName = $country = $count = $img = "";
+function getCities()
+{
+	$curl = curl_init();
+	curl_setopt_array($curl, [
+		CURLOPT_URL => "https://spott.p.rapidapi.com/places?limit=100&country=" . $GLOBALS["country"] . "&skip=0&type=CITY",
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_SSL_VERIFYHOST => false,
+		CURLOPT_ENCODING => "",
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 30,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => "GET",
+		CURLOPT_HTTPHEADER => [
+			"x-rapidapi-host: spott.p.rapidapi.com",
+			"x-rapidapi-key: 8bdacfc3eamsh5efe1bb230baba4p1f7eccjsn020c20bb1c6a"
+		],
+	]);
+	$GLOBALS["response"] = json_decode(curl_exec($curl));
+	$err = curl_error($curl);
+	curl_close($curl);
+	if ($err) {
+		echo "cURL Error #:" . $err;
+	} else {
+		$GLOBALS["count"] = count($GLOBALS["response"]);
+	}
 
 }
-function getImage($city){
-	$url = "https://api.teleport.org/api/urban_areas/slug:".$city."/images/";
+
+function getImage($city)
+{
+	$url = "https://api.teleport.org/api/urban_areas/slug:" . $city . "/images/";
 	$opts = array(
 		CURLOPT_URL => $url,
 		CURLOPT_SSL_VERIFYPEER => false,
@@ -41,15 +44,15 @@ function getImage($city){
 	$result = json_decode(curl_exec($c));
 	//var_dump($result);
 	//var_dump($result->photos[0]->image->mobile);
-    if(isset($result->photos[0]->image)){
+	if (isset($result->photos[0]->image)) {
 		$GLOBALS["img"] = $result->photos[0]->image->mobile;
-    }
-    else{
+	} else {
 		$GLOBALS["img"] = 'assets/images/NA.jpg';
-    }
+	}
 	//echo "<img src='" . $result->photos[0]->image->mobile . "'>";
 	curl_close($c);
 }
+
 if (isset($_POST['getcities'])) {
 	$country = $_POST['ccode'];
 	$countryName = $_POST['getcities'];
@@ -140,33 +143,34 @@ getCities();
       of <?php echo $countryName; ?>
     </p>
     <div class="row">
-		<?php for ($i = 0; $i < sizeof($response); $i++) {?>
-      <div class="col-sm-3 col-xs-6">
-        <div class="who">
-          <?php
-            getImage(strtolower($response[$i]->name));
-          ?>
-          <img src="<?php echo $img;?>" alt="Image of the City" class="img-responsive who-img" style="height: 250px;">
+		<?php for ($i = 0; $i < sizeof($response); $i++) { ?>
+          <div class="col-sm-3 col-xs-6">
+            <div class="who">
+				<?php
+				getImage(strtolower($response[$i]->name));
+				?>
+              <img src="<?php echo $img; ?>" alt="Image of the City" class="img-responsive who-img"
+                   style="height: 200px" ;>
 
-          <div>
-            <p class="who-detail">
-              Population: <?php echo $response[$i]->population; ?>
-            </p>
-				    <?php
-				      $lat = $response[$i]->coordinates->latitude;
-				      $lng = $response[$i]->coordinates->longitude;
-				    ?>
-            <form action="details.php" method="POST">
-              <input type="hidden" name="lat" value="<?php echo $lat ?>"/>
-              <input type="hidden" name="lng" value="<?php echo $lng ?>"/>
-              <input type="hidden" name="city" value="<?php echo $response[$i]->name ?>"/>
-              <input type="submit" name="finddetails" value="<?php echo $response[$i]->name; ?>"
-              class="btn btn-default custom-button border-radius"/>
-            </form>
-          </div>
-        </div>
-      </div> <!-- /.col-sm-3 -->
-		  <?php }?>
+              <div>
+                <p class="who-detail">
+                  Population: <?php echo $response[$i]->population; ?>
+                </p>
+				  <?php
+				  $lat = $response[$i]->coordinates->latitude;
+				  $lng = $response[$i]->coordinates->longitude;
+				  ?>
+                <form action="details.php" method="POST">
+                  <input type="hidden" name="lat" value="<?php echo $lat ?>"/>
+                  <input type="hidden" name="lng" value="<?php echo $lng ?>"/>
+                  <input type="hidden" name="city" value="<?php echo $response[$i]->name ?>"/>
+                  <input type="submit" name="finddetails" value="<?php echo $response[$i]->name; ?>"
+                         class="btn btn-default custom-button border-radius"/>
+                </form>
+              </div>
+            </div>
+          </div> <!-- /.col-sm-3 -->
+		<?php } ?>
     </div> <!-- /.row -->
   </div> <!-- /.container -->
 </section> <!-- /.wwa -->

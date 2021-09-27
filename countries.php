@@ -2,16 +2,17 @@
 get_countries();
 $result = "";
 function get_countries() {
-  $url = 'https://restcountries.eu/rest/v2/all';
-  $opts = array(
-	  CURLOPT_URL => $url,
-	  CURLOPT_SSL_VERIFYPEER => false,
-	  CURLOPT_SSL_VERIFYHOST => false,
-	  CURLOPT_RETURNTRANSFER => true
-  );
-  $c = curl_init();
-  curl_setopt_array($c, $opts);
-  $result = json_decode(curl_exec($c));
+$url = 'https://restcountries.com/v2/all';
+$opts = array(
+	CURLOPT_URL => $url,
+	CURLOPT_SSL_VERIFYPEER => false,
+	CURLOPT_SSL_VERIFYHOST => false,
+	CURLOPT_RETURNTRANSFER => true
+);
+$c = curl_init();
+curl_setopt_array($c, $opts);
+$result = json_decode(curl_exec($c));
+
 ?>
 <!DOCTYPE html>
 <!--[if IE 7 ]>
@@ -89,37 +90,65 @@ function get_countries() {
 </section> <!-- /.section-background -->
 <section class="contacts section-wrapper">
   <div class="container">
+    <h2 class="section-title">
+      Looking for best vacation?
+    </h2>
+    <p class="section-subtitle">
+      Click on the country name and explore cities of the country to find various activities in cities.
+    </p>
     <div class="row">
-		<?php for ($i = 0; $i < sizeof($result); $i++) {?>
-      <div class="col-sm-4 merbtm">
-        <div class="contact">
-          <div class="contact-icon">
-            <img src="<?php echo $result[$i]->flag ?>" alt="Flag of the <?php echo ' ' . $result[$i]->name ?>" class="flag">
-          </div>
-          <div class="contact-name">
-            <form action="cities.php" method="POST">
-              <input type="hidden" name="ccode" value="<?php echo $result[$i]->alpha2Code ?>"/>
-              <input type="hidden" name="countryname" value="<?php echo $result[$i]->name ?>"/>
-              <input type="submit" name="getcities" value="<?php echo $result[$i]->name ?>"/>
-            </form>
-          </div>
-          <div class="contact-detail">
-            <span class="lb">Capital</span>
-				    <?php echo $result[$i]->capital ?><br>
-            <span class="lb">Region</span>
-				    <?php echo $result[$i]->region ?><br>
-            <span class="lb">Population</span>
-				    <?php echo $result[$i]->population ?><br>
-            <span class="lb">Language</span>
-				    <?php echo $result[$i]->languages[0]->name ?><br>
-            <span class="lb">Currency</span>
-				    <?php echo $result[$i]->currencies[0]->name . ' (' . $result[$i]->currencies[0]->symbol . ')' ?><br>
-          </div>
-        </div> <!-- /.contact -->
-      </div> <!-- /.col-sm-4 -->
-		  <?php }
-		  curl_close($c);
-		  } ?>
+		<?php for ($i = 0; $i < sizeof($result); $i++) {
+
+			if (isset($result[$i]->flags[0],
+				$result[$i]->name,
+				$result[$i]->alpha2Code,
+				$result[$i]->capital,
+				$result[$i]->region,
+				$result[$i]->population,
+				$result[$i]->languages[0]->name,
+				$result[$i]->currencies[0]->name,
+				$result[$i]->currencies[0]->symbol)) {
+				$flag = $result[$i]->flags[0];
+				$country_name = $result[$i]->name;
+				$code = $result[$i]->alpha2Code;
+				$capital = $result[$i]->capital;
+				$region = $result[$i]->region;
+				$population = $result[$i]->population;
+				$language = $result[$i]->languages[0]->name;
+				$currency = $result[$i]->currencies[0]->name;
+				$symbol = $result[$i]->currencies[0]->symbol;
+
+				?>
+              <div class="col-sm-4 merbtm">
+                <div class="contact">
+                  <div class="contact-icon">
+                    <img src="<?php echo $flag ?>" alt="Flag of the <?php echo ' ' . $country_name ?>" class="flag">
+                  </div>
+                  <div class="contact-name">
+                    <form action="cities.php" method="POST">
+                      <input type="hidden" name="ccode" value="<?php echo $code ?>"/>
+                      <input type="hidden" name="countryname" value="<?php echo $country_name ?>"/>
+                      <input type="submit" name="getcities" value="<?php echo $country_name ?>"/>
+                    </form>
+                  </div>
+                  <div class="contact-detail">
+                    <span class="lb">Capital</span>
+					  <?php echo $capital ?><br>
+                    <span class="lb">Region</span>
+					  <?php echo $region ?><br>
+                    <span class="lb">Population</span>
+					  <?php echo $population ?><br>
+                    <span class="lb">Language</span>
+					  <?php echo $language ?><br>
+                    <span class="lb">Currency</span>
+					  <?php echo $currency . ' (' . $symbol . ')' ?><br>
+                  </div>
+                </div> <!-- /.contact -->
+              </div> <!-- /.col-sm-4 -->
+			<?php }
+		}
+		curl_close($c);
+		} ?>
     </div> <!-- /.row -->
   </div> <!-- /.container -->
 </section> <!-- /.contacts -->
