@@ -12,6 +12,8 @@ $opts = array(
 $c = curl_init();
 curl_setopt_array($c, $opts);
 $result = json_decode(curl_exec($c));
+//var_dump($result);
+
 
 ?>
 <!DOCTYPE html>
@@ -98,8 +100,7 @@ $result = json_decode(curl_exec($c));
     </p>
     <div class="row">
 		<?php for ($i = 0; $i < sizeof($result); $i++) {
-
-			if (isset($result[$i]->flags[0],
+			if (isset($result[$i]->flags->svg,
 				$result[$i]->name,
 				$result[$i]->alpha2Code,
 				$result[$i]->capital,
@@ -108,7 +109,7 @@ $result = json_decode(curl_exec($c));
 				$result[$i]->languages[0]->name,
 				$result[$i]->currencies[0]->name,
 				$result[$i]->currencies[0]->symbol)) {
-				$flag = $result[$i]->flags[0];
+				$flag = $result[$i]->flags->svg;
 				$country_name = $result[$i]->name;
 				$code = $result[$i]->alpha2Code;
 				$capital = $result[$i]->capital;
@@ -117,7 +118,6 @@ $result = json_decode(curl_exec($c));
 				$language = $result[$i]->languages[0]->name;
 				$currency = $result[$i]->currencies[0]->name;
 				$symbol = $result[$i]->currencies[0]->symbol;
-
 				?>
               <div class="col-sm-4 merbtm">
                 <div class="contact">
@@ -142,6 +142,7 @@ $result = json_decode(curl_exec($c));
 					  <?php echo $language ?><br>
                     <span class="lb">Currency</span>
 					  <?php echo $currency . ' (' . $symbol . ')' ?><br>
+
                   </div>
                 </div> <!-- /.contact -->
               </div> <!-- /.col-sm-4 -->
